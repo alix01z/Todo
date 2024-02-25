@@ -11,6 +11,7 @@ import com.alix01z.todoappkotlinmvvm.repository.AppRepository
 import com.alix01z.todoappkotlinmvvm.room.entites.TaskEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,6 +21,14 @@ class AppViewModel
     //Documents suggests using MutableLivedata and convert it to LiveData
     private var dbData : MutableLiveData<List<TaskEntity>> = MutableLiveData()
     var dbLiveData : LiveData<List<TaskEntity>> = dbData
+
+
+    //if we dont put getAlltask here (=It doesnt get provided once ViewModel is created) ,First Recyclerview
+    //will pass an empty list of data to Adapter , then when data-val is done fetching data , the Adapter WONT
+    //get notified!
+    init {
+        getAllTasksFromDB()
+    }
 
 
     //Room
@@ -43,7 +52,9 @@ class AppViewModel
 
     fun getAllTasksFromDB(){
         viewModelScope.launch(Dispatchers.IO){
-            val allTasks = repository.getAllTasks().observe()
+            repository.getAllTasks().collect(){
+                dbData.postValue(it)
+            }
 
         }
     }

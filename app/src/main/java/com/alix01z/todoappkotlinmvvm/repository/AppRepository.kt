@@ -3,6 +3,7 @@ package com.alix01z.todoappkotlinmvvm.repository
 import androidx.lifecycle.LiveData
 import com.alix01z.todoappkotlinmvvm.room.AppDatabase
 import com.alix01z.todoappkotlinmvvm.room.entites.TaskEntity
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class AppRepository
@@ -23,7 +24,7 @@ constructor(appDatabase: AppDatabase) {
         roomDao.updateTask(taskEntity)
     }
 
-    fun getAllTasks():LiveData<List<TaskEntity>>{
+    fun getAllTasks():Flow<List<TaskEntity>>{
         return roomDao.getAllTasks()
     }
 }

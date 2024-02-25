@@ -21,5 +21,5 @@ interface RoomDao {
     fun updateTask(taskEntity: TaskEntity)
 
     @Query("SELECT * FROM table_tasks")
-    fun getAllTasks() : LiveData<List<TaskEntity>>
+    fun getAllTasks() : Flow<List<TaskEntity>>
 }

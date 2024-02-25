@@ -24,10 +24,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
-    @Inject
-    lateinit var taskDB : AppDatabase
+
     private lateinit var binding : FragmentHomeBinding
-    //ViewModel
     private val appViewModel: AppViewModel by viewModels()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -39,22 +37,23 @@ class HomeFragment : Fragment() {
         return binding.root
     }
     private fun initUpcomingRecyclerview(){
-        binding.rvAllTasks.apply {
-            var data : List<TaskEntity> = ArrayList()
-
-            lifecycleScope.launch(Dispatchers.IO) {
-                data = taskDB.roomDao().getAllTasks()
-
-                // Switching to the Main thread (from background) to update UI components
-                withContext(Dispatchers.Main) {
-                    binding.rvAllTasks.apply {
-                        this.adapter = UpcomingRvAdapter(data)
-                        this.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-                    }
-                }
+        appViewModel.dbLiveData.observe(viewLifecycleOwner){taskList->
+            val data : ArrayList<TaskEntity> = ArrayList()
+            taskList.forEach {
+                data.add(it)
+            }
+            //Check List is Empty or not
+            if (data.isEmpty()){
+                binding.txEmptyTasklist.visibility = View.VISIBLE
+                binding.lottieEmptyTasklist.visibility = View.VISIBLE
+            }
+            else{
+                binding.txEmptyTasklist.visibility = View.GONE
+                binding.lottieEmptyTasklist.visibility = View.GONE
             }
 
+            binding.rvAllTasks.adapter = UpcomingRvAdapter(data)
+            binding.rvAllTasks.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         }
-//        binding.rvAllTasks.adapter = UpcomingRvAdapter
     }
 }

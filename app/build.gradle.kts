@@ -75,6 +75,10 @@ dependencies {
     implementation ("com.google.dagger:hilt-android:2.50")
     kapt ("com.google.dagger:hilt-compiler:2.50")
 
+    //Lottie
+    val lottieVersion = "6.3.0"
+    implementation ("com.airbnb.android:lottie:$lottieVersion")
+
 }
 //Hilt - Allow references to generated code
 kapt {
