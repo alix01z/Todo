@@ -9,7 +9,7 @@ import com.alix01z.todoappkotlinmvvm.R
 import com.alix01z.todoappkotlinmvvm.databinding.ItemTaskBinding
 import com.alix01z.todoappkotlinmvvm.room.entites.TaskEntity
 
-class UpcomingRvAdapter(private var taskList: List<TaskEntity>) : RecyclerView.Adapter<UpcomingRvAdapter.UpcomingRvViewHolder>() {
+class UpcomingRvAdapter(private var taskList: List<TaskEntity> , private var listener: CardTaskClickListener) : RecyclerView.Adapter<UpcomingRvAdapter.UpcomingRvViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UpcomingRvViewHolder {
         val binding:ItemTaskBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context) ,
@@ -19,16 +19,17 @@ class UpcomingRvAdapter(private var taskList: List<TaskEntity>) : RecyclerView.A
 
 
     override fun onBindViewHolder(holder: UpcomingRvViewHolder, position: Int) {
-        holder.bindData(taskList[position])
+        holder.bindData(taskList[position] , listener)
     }
     override fun getItemCount(): Int {
         return taskList.size
     }
 
     class UpcomingRvViewHolder(private var binding: ItemTaskBinding): RecyclerView.ViewHolder(binding.root){
-        fun bindData(taskEntity: TaskEntity){
+        fun bindData(taskEntity: TaskEntity, listener: CardTaskClickListener){
+
             binding.txItemTitle.setTextFuture(
-                taskEntity.title.let {
+                taskEntity.title?.let {
                     PrecomputedTextCompat.getTextFuture(
                         it,
                         binding.txItemTitle.textMetricsParamsCompat,
@@ -37,7 +38,7 @@ class UpcomingRvAdapter(private var taskList: List<TaskEntity>) : RecyclerView.A
                 }
             )
             binding.txItemComment.setTextFuture(
-                taskEntity.title.let {
+                taskEntity.comment?.let {
                     PrecomputedTextCompat.getTextFuture(
                         it,
                         binding.txItemComment.textMetricsParamsCompat,
@@ -45,6 +46,18 @@ class UpcomingRvAdapter(private var taskList: List<TaskEntity>) : RecyclerView.A
                     )
                 }
             )
+            //Listeners
+            binding.imgvItemMore.setOnClickListener {
+                listener.onOptionClickListener(it , taskEntity)
+            }
+            binding.cvItemTask.setOnClickListener {
+                listener.onItemClickListener(taskEntity)
+            }
+            binding.itemCheckBox.setOnClickListener {
+                listener.onItemCheckBoxListener(binding.itemCheckBox , binding.txItemTitle ,
+                    binding.txItemComment ,taskEntity)
+            }
+
             binding.executePendingBindings()
         }
     }

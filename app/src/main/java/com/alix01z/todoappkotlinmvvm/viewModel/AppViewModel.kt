@@ -55,7 +55,6 @@ class AppViewModel
             repository.getAllTasks().collect(){
                 dbData.postValue(it)
             }
-
         }
     }
 

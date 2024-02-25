@@ -17,5 +17,6 @@ object AppModule {
     @Provides
     fun provideRoomDB(application: Application):AppDatabase =
         Room.databaseBuilder(application , AppDatabase::class.java , "TaskDB")
+            .fallbackToDestructiveMigration()
             .build()
 }
