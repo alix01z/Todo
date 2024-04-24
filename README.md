@@ -1,6 +1,6 @@
 # Todo
 
-Stay updated with live cryptocurrency prices, charts, and market changes!
+Easily manage tasks and stay organized with this intuitive todo app.
 
 ### ScreenShots
 
