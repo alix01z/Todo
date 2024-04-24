@@ -6,11 +6,14 @@ Easily manage tasks and stay organized with this intuitive todo app.
 
 # About the Project
 
+
+
 # Features
 Techs & Tools used in this project:
 * Kotlin
-* Design Patterns: MVVM , Single Acitvity , Dependecy Injection
+* Architectural & Design Patterns: MVVM , Single Acitvity , Dependecy Injection
 * Hilt
+* Coroutine
 * Room DataBase
 * Navigtion Component
 * DataBinding
